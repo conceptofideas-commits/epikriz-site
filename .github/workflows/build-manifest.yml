@@ -1,0 +1,63 @@
+name: build-manifest
+
+on:
+  push:
+    paths:
+      - 'mrt/**'
+      - 'uzi/**'
+      - 'reports/**'
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with: { fetch-depth: 0 }
+
+      - name: Generate files.json
+        run: |
+          python3 - <<'PY'
+          import os, json, re, time
+
+          FOLDERS = [("mrt","mri"), ("uzi","uzi"), ("reports","report")]
+          items = []
+          def prettify(name):
+              name = os.path.splitext(os.path.basename(name))[0]
+              # заменяем дефисы/подчёркивания пробелами, убираем лишнее
+              name = re.sub(r'[-_]+', ' ', name).strip()
+              return name[:120]
+
+          for folder, typ in FOLDERS:
+              if not os.path.isdir(folder):
+                  continue
+              for root, _, files in os.walk(folder):
+                  for f in files:
+                      if f.startswith('.'): continue
+                      path = os.path.join(root, f).replace("\\","/")
+                      size = os.path.getsize(path)
+                      ts = int(os.path.getmtime(path))
+                      items.append({
+                        "type": typ,
+                        "path": path,
+                        "title": prettify(f),
+                        "size": size,
+                        "updated_at": ts
+                      })
+
+          # сортировка: сначала новые
+          items.sort(key=lambda x: x["updated_at"], reverse=True)
+          with open("files.json","w",encoding="utf-8") as fp:
+              json.dump({"items": items, "generated_at": int(time.time())}, fp, ensure_ascii=False, indent=2)
+          print(f"wrote files.json with {len(items)} items")
+          PY
+
+      - name: Commit manifest
+        uses: EndBug/add-and-commit@v9
+        with:
+          add: files.json
+          message: 'chore: auto-generate files.json'
+          default_author: github_actions
