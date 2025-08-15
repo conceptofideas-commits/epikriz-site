@@ -15,74 +15,47 @@ jobs:
   rename:
     runs-on: ubuntu-latest
     steps:
-      - name: Checkout
-        uses: actions/checkout@v4
-        with:
-          fetch-depth: 0
+      - uses: actions/checkout@v4
+        with: { fetch-depth: 0 }
 
-      - name: Run transliteration rename
+      - name: Transliterate and rename
         run: |
           python3 - <<'PY'
-          import os, re, sys
+          import os, re
           TARGETS = ['mrt','uzi','reports']
-
-          MAP = {
-              "а":"a","б":"b","в":"v","г":"h","ґ":"g","д":"d","е":"e","є":"ie","ж":"zh","з":"z",
-              "и":"y","і":"i","ї":"i","й":"y","к":"k","л":"l","м":"m","н":"n","о":"o","п":"p",
-              "р":"r","с":"s","т":"t","у":"u","ф":"f","х":"kh","ц":"ts","ч":"ch","ш":"sh","щ":"shch",
-              "ь":"","ю":"yu","я":"ya",
-              "ё":"e","ъ":"","э":"e"
-          }
+          MAP = {"а":"a","б":"b","в":"v","г":"h","ґ":"g","д":"d","е":"e","є":"ie","ж":"zh","з":"z","и":"y","і":"i","ї":"i","й":"y","к":"k","л":"l","м":"m","н":"n","о":"o","п":"p","р":"r","с":"s","т":"t","у":"u","ф":"f","х":"kh","ц":"ts","ч":"ch","ш":"sh","щ":"shch","ь":"","ю":"yu","я":"ya","ё":"e","ъ":"","э":"e"}
           MAP.update({k.upper(): (v.capitalize() if v else "") for k,v in MAP.items()})
-
-          def translit(name):
-              out = ''.join(MAP.get(ch, ch) for ch in name)
-              out = out.replace(' ', '-')
-              out = re.sub(r'[^A-Za-z0-9._-]', '-', out)
-              out = re.sub(r'-{2,}', '-', out).strip('-').lower()
-              return out or 'file'
-
-          def safe_rename(src_path, dst_path):
-              if src_path == dst_path:
-                  return
-              base, ext = os.path.splitext(dst_path)
-              cand = dst_path
-              i = 2
+          def tr(s):
+              s=''.join(MAP.get(ch,ch) for ch in s)
+              s=s.replace(' ','-')
+              s=re.sub(r'[^A-Za-z0-9._-]','-',s)
+              s=re.sub(r'-{2,}','-',s).strip('-').lower()
+              return s or 'file'
+          def move(src,dst):
+              if src==dst: return
+              base,ext=os.path.splitext(dst); i=2; cand=dst
               while os.path.exists(cand):
-                  cand = f"{base}-{i}{ext}"
-                  i += 1
-              os.renames(src_path, cand)
-
-          changed = False
-          for target in TARGETS:
-              if not os.path.isdir(target):
-                  continue
-              for root, dirs, files in os.walk(target, topdown=False):
-                  # files
+                  cand=f"{base}-{i}{ext}"; i+=1
+              os.renames(src,cand)
+          changed=False
+          for t in TARGETS:
+              if not os.path.isdir(t): continue
+              for root,dirs,files in os.walk(t,topdown=False):
                   for f in files:
-                      nf = translit(f)
-                      if nf != f:
-                          src = os.path.join(root, f)
-                          dst = os.path.join(root, nf)
-                          safe_rename(src, dst)
-                          changed = True
-                  # dirs
+                      nf=tr(f); 
+                      if nf!=f: move(os.path.join(root,f), os.path.join(root,nf)); changed=True
                   for d in dirs:
-                      nd = translit(d)
-                      if nd != d:
-                          src = os.path.join(root, d)
-                          dst = os.path.join(root, nd)
-                          safe_rename(src, dst)
-                          changed = True
-
+                      nd=tr(d);
+                      if nd!=d: move(os.path.join(root,d), os.path.join(root,nd)); changed=True
           open('.rename-changed','w').write('1' if changed else '0')
-          print('changed =', changed)
           PY
 
-      - name: Commit & push (if changes)
+      - name: Commit changes
         if: hashFiles('.rename-changed') != ''
         uses: EndBug/add-and-commit@v9
         with:
           add: .
           message: 'chore: transliterate filenames to latin (auto)'
           default_author: github_actions
+
+
