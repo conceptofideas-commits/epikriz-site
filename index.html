@@ -103,3 +103,60 @@
 
 </body>
 </html>
+<main id="items" class="wrap" aria-label="Мої документи">
+  <h1>Документи</h1>
+  <p class="muted">Поклади файли в <code>mrt/</code>, <code>uzi/</code>, <code>reports/</code> — список оновиться автоматично.</p>
+
+  <div id="grid" class="grid"></div>
+</main>
+
+<script>
+  const TYPE_BADGE = { mri: 'МРТ', uzi: 'УЗД', report: 'Виписка' };
+  const TYPE_COLOR = { mri: '#8F87FF', uzi: '#84ADFF', report: '#E0C577' };
+
+  async function loadManifest() {
+    try {
+      const res = await fetch('files.json', { cache: 'no-store' });
+      if (!res.ok) throw new Error('files.json not found');
+      const data = await res.json();
+      renderGrid(data.items || []);
+    } catch (e) {
+      console.warn(e);
+      document.getElementById('grid').innerHTML =
+        '<p class="muted">Поки що немає файлів або маніфест не згенеровано.</p>';
+    }
+  }
+
+  function humanSize(bytes){
+    const u=['B','KB','MB','GB']; let i=0; let n=bytes;
+    while(n>=1024 && i<u.length-1){ n/=1024; i++; }
+    return (Math.round(n*10)/10)+' '+u[i];
+  }
+
+  function renderGrid(items){
+    const grid = document.getElementById('grid');
+    if(!items.length){ grid.innerHTML = '<p class="muted">Нічого не знайдено.</p>'; return; }
+    grid.innerHTML = items.map(it => {
+      const badge = TYPE_BADGE[it.type] || 'Файл';
+      const color = TYPE_COLOR[it.type] || '#AAA';
+      const date = new Date(it.updated_at*1000).toLocaleDateString();
+      return `
+        <article class="card">
+          <a href="${it.path}" target="_blank" rel="noopener" style="display:block;color:inherit;text-decoration:none">
+            <div class="card__thumb" style="color:${color};">${badge}</div>
+            <div class="card__body">
+              <h3 class="card__title">${escapeHtml(it.title)}</h3>
+              <p class="card__meta">${date} • ${humanSize(it.size)}</p>
+            </div>
+          </a>
+        </article>
+      `;
+    }).join('');
+  }
+
+  function escapeHtml(str){
+    return str.replace(/[&<>"']/g, m => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[m]));
+  }
+
+  loadManifest();
+</script>
