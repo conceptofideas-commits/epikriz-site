@@ -45,4 +45,98 @@
   </div>
 </body>
 </html>
+<!doctype html>
+<html lang="uk">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>My medical record — Epikriz</title>
+  <meta name="description" content="Зберігання, пошук і впорядкування епікризів, МРТ, УЗД." />
+  <meta name="theme-color" content="#0f172a" />
+  <!-- OG-постер: заміни на свій webp, якщо є -->
+  <meta property="og:image" content="assets/hero-poster.webp" />
+
+  <style>
+    :root{--bg:#0f172a;--text:#fff;--muted:#cbd5e1;--accent:#fbbf24;}
+    *{box-sizing:border-box} html,body{margin:0;padding:0;background:var(--bg);color:var(--text);font:16px/1.5 system-ui,-apple-system,Segoe UI,Roboto,Ubuntu,"Helvetica Neue",Arial}
+    header{padding:22px 20px; background:#1e293b; position:sticky; top:0; z-index:10; border-bottom:1px solid #0b1220}
+    .wrap{max-width:1100px; margin:0 auto}
+    h1{margin:0;font-size:28px}
+    .sub{margin-top:4px;color:var(--muted);font-size:14px}
+
+    .hero{position:relative; margin:24px auto; max-width:1100px; border-radius:16px; overflow:hidden; background:#000}
+    .hero img{display:block;width:100%;height:auto;object-fit:cover;aspect-ratio: 16/9;}
+    .hero::after{content:""; position:absolute; inset:0; background:linear-gradient(180deg,rgba(0,0,0,.25),rgba(0,0,0,.4));}
+
+    .hero__content{position:absolute; inset:0; display:flex; flex-direction:column; justify-content:flex-end; padding:24px; gap:8px}
+    .hero__title{font-size:clamp(24px,4vw,44px); font-weight:700; margin:0}
+    .hero__lead{max-width:720px; color:var(--muted)}
+
+    .cta{display:flex; gap:10px; margin-top:6px; flex-wrap:wrap}
+    .btn{display:inline-flex; align-items:center; gap:8px; padding:10px 14px; border-radius:12px; text-decoration:none; font-weight:600}
+    .btn--light{background:#fff;color:#0f172a}
+    .btn--dark{background:rgba(30,41,59,.7); backdrop-filter:saturate(120%) blur(6px)}
+
+    /* Книги-кнопки */
+    .books{position:absolute; left:50%; transform:translateX(-50%); bottom:5%; display:flex; gap:28px}
+    .book{display:block; text-decoration:none}
+    .book .top{width:140px;height:6px;background:var(--accent);border-radius:6px;box-shadow:0 0 44px rgba(251,191,36,.75)}
+    .book .bot{margin-top:6px;width:156px;height:6px;background:#fde68a;border-radius:6px}
+    @media (max-width: 640px){ .books{display:none} }
+
+    section{padding:68px 20px}
+    h2{font-size:28px;margin:0 0 10px}
+    .muted{color:var(--muted)}
+    footer{padding:24px 20px;border-top:1px solid #0b1220;color:#94a3b8}
+  </style>
+</head>
+<body>
+  <header>
+    <div class="wrap">
+      <h1>My medical record</h1>
+      <div class="sub">GitHub Pages віддає index.html з гілки main.</div>
+    </div>
+  </header>
+
+  <!-- HERO -->
+  <div class="hero">
+    <!-- ЗАМЕНИ путь/имя файла, если нужно -->
+    <img src="assets/hero.png" alt="Електронний медичний архів Epikriz" loading="eager" />
+    <div class="hero__content">
+      <h2 class="hero__title">Електронний медичний архів</h2>
+      <p class="hero__lead">Зберігання, пошук і впорядкування епікризів, МРТ, УЗД. Надійно, швидко, під рукою.</p>
+      <div class="cta">
+        <a class="btn btn--light" href="#start">Почати</a>
+        <a class="btn btn--dark" href="#about">Дізнатися більше</a>
+      </div>
+    </div>
+
+    <!-- «книги» як кнопки -->
+    <div class="books">
+      <a href="#mri" class="book" aria-label="МРТ">
+        <span class="top"></span><span class="bot"></span>
+      </a>
+      <a href="#ultrasound" class="book" aria-label="УЗД">
+        <span class="top"></span><span class="bot"></span>
+      </a>
+      <a href="#labs" class="book" aria-label="Аналізи">
+        <span class="top"></span><span class="bot"></span>
+      </a>
+    </div>
+  </div>
+
+  <!-- Розділи -->
+  <section id="mri" class="wrap">
+    <h2>МРТ</h2><p class="muted">Скоро: структурування знімків, посилання на DICOM, короткі нотатки.</p>
+  </section>
+  <section id="ultrasound" class="wrap">
+    <h2>УЗД</h2><p class="muted">Скоро: каталоги обстежень, дати, теги, швидкий пошук.</p>
+  </section>
+  <section id="labs" class="wrap">
+    <h2>Аналізи</h2><p class="muted">Скоро: збереження PDF, діаграми, зміни показників.</p>
+  </section>
+
+  <footer class="wrap">© Epikriz</footer>
+</body>
+</html>
 
