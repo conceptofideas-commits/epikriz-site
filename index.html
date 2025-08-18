@@ -3,114 +3,52 @@
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width,initial-scale=1" />
-  <title>Epikriz — медичний архів</title>
-  <meta name="description" content="Зберігання, пошук і впорядкування епікризів, МРТ, УЗД." />
-  <meta property="og:image" content="/assets/hero-poster.webp" />
+  <title>Epikriz — інтерактивне hero</title>
+  <meta name="description" content="Повноекранне зображення з інтерактивною навігацією." />
   <meta name="theme-color" content="#0f172a" />
-  <style>
-    :root{
-      --bg:#0f172a;--text:#fff;--muted:#cbd5e1;
-      --green:#10b981;--red:#b91c1c;--blue:#2563eb;
-      --glow:44px;
-    }
-    *{box-sizing:border-box}
-    html,body{margin:0;background:var(--bg);color:var(--text);font:16px/1.5 system-ui,-apple-system,Segoe UI,Roboto,Ubuntu,"Helvetica Neue",Arial}
-
-    /* Верхнее меню */
-    .nav{position:sticky;top:0;z-index:30;background:rgba(2,6,23,.75);backdrop-filter:blur(6px);border-bottom:1px solid #0b1220}
-    .wrap{max-width:1100px;margin:0 auto;padding:14px 16px;display:flex;gap:16px;align-items:center;justify-content:space-between}
-    .brand{font-weight:700;letter-spacing:.3px}
-    .menu{display:flex;gap:14px}
-    .menu a{color:var(--muted);text-decoration:none;padding:8px 10px;border-radius:10px}
-    .menu a:hover{background:rgba(148,163,184,.12);color:#fff}
-
-    /* HERO */
-    .hero{position:relative;max-width:1100px;margin:22px auto;border-radius:16px;overflow:hidden;background:#000;aspect-ratio:16/9;}
-    .hero picture,.hero img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover}
-    .hero img{filter:saturate(.9) brightness(1.07) contrast(1.03)}
-    .hero::before{content:"";position:absolute;inset:0;background:linear-gradient(180deg,rgba(0,0,0,.18),rgba(0,0,0,.42))}
-    .hero::after{content:"";position:absolute;inset:0;background:radial-gradient(70% 55% at 50% 45%, rgba(255,255,255,.10) 0%, rgba(0,0,0,0) 60%)}
-
-    /* Заголовок */
-    .screen{position:absolute;left:22%;top:20%;width:40%;z-index:3;text-align:center;text-shadow:0 2px 18px rgba(0,0,0,.55);}
-    .title{margin:0;font-size:clamp(20px,3.8vw,40px);font-weight:800;letter-spacing:.2px}
-    .subtitle{margin:.35rem 0 0;color:var(--muted);font-size:clamp(12px,1.4vw,16px)}
-
-    /* Кликабельные зоны */
-    .hotspot{position:absolute;z-index:4;display:block;outline:0;border-radius:10px}
-    .hotspot::after{content:"";position:absolute;inset:0;border-radius:inherit;box-shadow:0 0 0 0 rgba(255,255,255,0);transition:box-shadow .18s ease, background .18s ease, transform .18s ease;}
-    .hotspot:hover::after,.hotspot:focus-visible::after{transform:translateZ(0)}
-    .hotspot .label{position:absolute;left:50%;top:0;transform:translate(-50%, -110%);background:rgba(2,6,23,.85);backdrop-filter:blur(6px);color:#fff;border:1px solid rgba(148,163,184,.25);padding:6px 10px;border-radius:10px;font-size:13px;white-space:nowrap;opacity:0;pointer-events:none;transition:opacity .15s}
-    .hotspot:hover .label,.hotspot:focus-visible .label{opacity:1}
-    .hs-green:hover::after{box-shadow:0 0 0 3px rgba(16,185,129,.95),0 0 var(--glow) rgba(16,185,129,.55); background:rgba(16,185,129,.08)}
-    .hs-red:hover::after{box-shadow:0 0 0 3px rgba(185,28,28,.95),0 0 var(--glow) rgba(185,28,28,.55); background:rgba(185,28,28,.08)}
-    .hs-blue:hover::after{box-shadow:0 0 0 3px rgba(37,99,235,.95),0 0 var(--glow) rgba(37,99,235,.55); background:rgba(37,99,235,.08)}
-
-    section{padding:68px 20px}
-    h2{font-size:28px;margin:0 0 10px}
-    .muted{color:var(--muted)}
-    footer{padding:24px 20px;border-top:1px solid #0b1220;color:#94a3b8;text-align:center}
-  </style>
+  <link rel="preload" as="image" href="/assets/hero-1280.webp" imagesrcset="/assets/hero-768.webp 768w, /assets/hero-1280.webp 1280w, /assets/hero-1920.webp 1920w" imagesizes="100vw">
+  <link rel="stylesheet" href="styles/hero.css">
 </head>
 <body>
-  <nav class="nav">
-    <div class="wrap">
-      <div class="brand">Epikriz</div>
-      <div class="menu">
-        <a href="#home">Home</a>
-        <a href="#about">About</a>
-        <a href="#contacts">Contacts</a>
-      </div>
-    </div>
-  </nav>
 
-  <main id="home">
-    <div class="hero">
-      <picture>
-        <source type="image/webp"
-                srcset="/assets/hero-768.webp 768w, /assets/hero-1280.webp 1280w, /assets/hero-1920.webp 1920w"
-                sizes="(max-width:640px) 100vw, (max-width:1024px) 90vw, 100vw">
-        <img src="/assets/hero-1920.webp" alt="Операційна з екранами та книжними стосами">
-      </picture>
+  <!-- HERO (повноекранне зображення + кнопки) -->
+  <header class="hero" id="home" aria-label="Обкладинка сторінки">
+    <picture class="hero__media" aria-hidden="true">
+      <source type="image/webp"
+              srcset="/assets/hero-768.webp 768w, /assets/hero-1280.webp 1280w, /assets/hero-1920.webp 1920w"
+              sizes="100vw">
+      <img src="/assets/hero-1920.webp" alt="" />
+    </picture>
 
-      <div class="screen" aria-hidden="true">
-        <h1 class="title">My Medical Record</h1>
-        <p class="subtitle">Your health data, structured &amp; secure</p>
-      </div>
+    <!-- нижня панель з кнопками -->
+    <nav class="hero__nav" aria-label="Головна навігація">
+      <!-- HTML-посилання/якорі (fallback без JS) -->
+      <a class="hero__btn" id="btn-healthcare" href="#healthcare" data-target="#healthcare" role="button">
+        <span class="hero__btn-label">Healthcare</span>
+      </a>
+      <a class="hero__btn" id="btn-exam" href="#exam" data-target="#exam" role="button">
+        <span class="hero__btn-label">Health exam</span>
+      </a>
+    </nav>
+  </header>
 
-      <!-- кнопки -->
-      <a class="hotspot hs-green" href="#research" style="left:22%; top:67%; width:10%; height:23%;"><span class="label">Research / Дослідження</span></a>
-      <a class="hotspot hs-red" href="#diagnoses" style="left:54.5%; top:63%; width:11%; height:30%;"><span class="label">Diagnoses / Діагнози</span></a>
-      <a class="hotspot hs-blue" href="#msec" style="left:68.5%; top:67%; width:10%; height:26%;"><span class="label">Preparation for MSEC / Підготовка до МСЕК</span></a>
-    </div>
-
-    <!-- PDF-блок -->
-    <section id="pdf-viewer" style="padding:40px 0; background:#f9f9f9; color:#000;">
-      <div style="max-width:1200px; margin:0 auto; text-align:center;">
-        <h2>📑 Медичний архів (PDF)</h2>
-        <iframe src="assets/epikriz.pdf" width="100%" height="800px" style="border:1px solid #ccc; border-radius:8px;"></iframe>
+  <!-- Цільові секції (якорі) -->
+  <main id="content">
+    <section id="healthcare" class="section">
+      <div class="section__wrap">
+        <h2>Healthcare</h2>
+        <p>Опис блоку про медичну систему, маршрути пацієнта, профілактику, тощо.</p>
       </div>
     </section>
 
-    <!--
-    <section id="research" class="wrap">
-      <h2>Дослідження</h2>
-      <p class="muted">МРТ/КТ/УЗД, DICOM-посилання, нотатки, теги. (Контент додамо пізніше.)</p>
+    <section id="exam" class="section">
+      <div class="section__wrap">
+        <h2>Health exam</h2>
+        <p>Опис блоку про обстеження: МРТ/КТ/УЗД, аналізи, підготовка, результати.</p>
+      </div>
     </section>
-
-    <section id="diagnoses" class="wrap">
-      <h2>Діагнози</h2>
-      <p class="muted">Таймлайн діагнозів, фільтри за лікарнями та лікарями, прикріплені файли.</p>
-    </section>
-
-    <section id="msec" class="wrap">
-      <h2>Підготовка до МСЕК</h2>
-      <p class="muted">Чек-листи документів, статуси, дедлайни.</p>
-    </section>
-    -->
   </main>
 
-  <footer>© Epikriz</footer>
+  <script type="module" src="scripts/hero.js"></script>
 </body>
 </html>
-
