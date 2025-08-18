@@ -1,0 +1,122 @@
+:root{
+  --bg: #0f172a;         /* фоновий колір сторінки */
+  --text: #e5e7eb;       /* базовий текст */
+  --muted:#a1a7b3;       /* приглушений */
+  --line:#1f2937;        /* лінії/бордери */
+  --btn-bg: rgba(11,18,32,.75);
+  --btn-bg-hover: rgba(11,18,32,.92);
+  --btn-ring: rgba(255,255,255,.18);
+  --radius: 14px;
+}
+
+/* Базове скидання/типографіка */
+*{ box-sizing:border-box }
+html,body{ height:100%; margin:0 }
+body{
+  background:var(--bg);
+  color:var(--text);
+  font: 16px/1.5 system-ui, -apple-system, Segoe UI, Roboto, Ubuntu, "Helvetica Neue", Arial;
+}
+
+/* ===== HERO ===== */
+.hero{
+  position:relative;
+  min-height:100dvh;              /* “на всю висоту” (підтримує мобільні бари) */
+  isolation:isolate;
+  overflow:hidden;
+}
+
+.hero__media{
+  position:absolute;
+  inset:0;
+  display:block;
+}
+.hero__media > img{
+  width:100%;
+  height:100%;
+  object-fit:cover;                /* розтягнути на всю ширину/висоту з прирізкою */
+  object-position:center center;
+  filter: saturate(.98) brightness(1.05) contrast(1.02);
+}
+
+/* затемнення + м’який градієнт, щоб кнопки читались */
+.hero::before{
+  content:"";
+  position:absolute;
+  inset:0;
+  background:linear-gradient(
+    to bottom,
+    rgba(0,0,0,.10) 0%,
+    rgba(0,0,0,.35) 55%,
+    rgba(0,0,0,.55) 100%
+  );
+  pointer-events:none;
+}
+
+/* панель кнопок у нижній частині */
+.hero__nav{
+  position:absolute;
+  left:0; right:0; bottom:0;
+  display:flex;
+  gap:12px;
+  padding: clamp(12px, 2.5vw, 22px);
+  justify-content:center;
+  align-items:center;
+  /* safe-area для iOS */
+  padding-bottom: calc(clamp(12px, 2.5vw, 22px) + env(safe-area-inset-bottom, 0px));
+}
+
+/* кнопки */
+.hero__btn{
+  --padY: 12px; --padX: 16px;
+  display:inline-flex;
+  align-items:center;
+  justify-content:center;
+  padding: var(--padY) var(--padX);
+  min-width: 160px;
+  border-radius: var(--radius);
+  text-decoration:none;
+  color:#fff;
+  background: var(--btn-bg);
+  border: 1px solid var(--btn-ring);
+  backdrop-filter: blur(6px) saturate(120%);
+  transition: background .18s ease, transform .18s ease, border-color .18s ease;
+  outline: none;
+}
+
+/* доступність + фокус */
+.hero__btn:focus-visible{
+  border-color: #93c5fd;
+  box-shadow: 0 0 0 3px rgba(147,197,253,.25);
+}
+.hero__btn:hover{ background: var(--btn-bg-hover); transform: translateY(-1px) }
+.hero__btn:active{ transform: translateY(0) }
+
+.hero__btn-label{
+  font-weight:700;
+  letter-spacing:.2px;
+}
+
+/* Секції-мішені */
+.section{
+  padding: min(9vh, 72px) 16px;
+  border-top:1px solid var(--line);
+  background: #0b1220;
+}
+.section__wrap{
+  max-width: 1000px;
+  margin: 0 auto;
+}
+.section h2{
+  margin:0 0 8px;
+  font-size: clamp(22px, 3.5vw, 32px);
+}
+.section p{
+  margin:0;
+  color: var(--muted);
+}
+
+/* Зменшити “стрибунину” при анімації для користувачів із reduced motion */
+@media (prefers-reduced-motion: reduce){
+  .hero__btn{ transition: none }
+}
