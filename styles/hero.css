@@ -1,6 +1,6 @@
 :root{
-  --bg: #0f172a;
-  --bg-soft: #0b1220;
+  --bg: #0f172a;      /* фоновий колір сторінки */
+  --bg-soft: #0b1220; /* фон секцій під геро */
   --text: #e8eef5;
   --muted:#b6c0cc;
   --ring: rgba(255,255,255,.18);
@@ -14,53 +14,57 @@ body{
   background: var(--bg);
   color: var(--text);
   font: 16px/1.5 system-ui, -apple-system, Segoe UI, Roboto, Ubuntu, "Helvetica Neue", Arial;
+  overflow-x: hidden;  /* щоб не було горизонтального скролу на мобі */
 }
 
-/* ---------- HERO ---------- */
+/* ---------- HERO (edge-to-edge) ---------- */
 .hero{
   position: relative;
-  min-height: 100dvh;      /* висота екрана з урахуванням моб.барів */
+  min-height: 100svh;           /* враховує мобільні бари (iOS/Android) */
   isolation: isolate;
-  overflow: hidden;
+  overflow: clip;               /* “не виплескуватися” за межі */
 }
+
 .hero__media{ position:absolute; inset:0 }
 .hero__media picture, .hero__media img{
   position:absolute; inset:0; width:100%; height:100%;
-  object-fit: cover;                 /* НЕ тягнемо, а кадруємо як постер */
-  object-position: center top;       /* бачимо верх (небо/заголовок на постері) */
-}
-.hero::before{
-  content:""; position:absolute; inset:0;
-  background: linear-gradient( to bottom,
-    rgba(0,0,0,.10) 0%,
-    rgba(0,0,0,.40) 55%,
-    rgba(0,0,0,.65) 100%
-  );
-  pointer-events:none;
+  object-fit: cover;            /* заповнити екран без спотворення */
+  object-position: center top;  /* показує “небо” та заголовок постера */
 }
 
-/* текст у центрі */
+/* м’яке затемнення для читабельності */
+.hero__overlay{
+  position:absolute; inset:0; pointer-events:none;
+  background: linear-gradient(
+    to bottom,
+    rgba(0,0,0,.10) 0%,
+    rgba(0,0,0,.35) 55%,
+    rgba(0,0,0,.60) 100%
+  );
+}
+
+/* контент у центрі */
 .hero__content{
   position: relative; z-index: 1;
   min-height: 100%;
   display: grid; place-content: center;
+  padding: clamp(16px, 3vw, 28px);
   text-align: center;
-  padding: 24px;
 }
 .hero__title{
   margin: 0 0 8px;
   font-weight: 800;
   letter-spacing: .2px;
-  font-size: clamp(28px, 5.5vw, 54px);
+  font-size: clamp(28px, 5.2vw, 56px);
   text-shadow: 0 2px 16px rgba(0,0,0,.55);
 }
 .hero__subtitle{
   margin: 0 0 22px;
   color: var(--muted);
-  font-size: clamp(14px, 2.5vw, 18px);
+  font-size: clamp(14px, 2.6vw, 18px);
 }
 
-/* док-навігація (кнопки) */
+/* док з кнопками */
 .hero__dock{
   display:flex; gap:14px; justify-content:center;
 }
@@ -72,59 +76,58 @@ body{
   width:68px; height:68px; display:grid; place-items:center;
   font-size:28px; line-height:1;
   border-radius: 20px;
-  background: rgba(11,18,32,.75);
+  background: rgba(11,18,32,.78);
   backdrop-filter: blur(8px) saturate(120%);
   border: 1px solid var(--ring);
   transition: transform .18s, background .18s, border-color .18s, box-shadow .18s;
 }
-.dock__label{
-  font-size: 14px; color: var(--muted);
-  text-shadow: 0 1px 2px rgba(0,0,0,.25);
-}
-.dock__btn:focus-visible .dock__icon{
-  border-color: var(--accent);
-  box-shadow: 0 0 0 3px rgba(147,197,253,.25);
-}
-.dock__btn:hover .dock__icon{ transform: translateY(-1px); background: rgba(11,18,32,.9) }
+.dock__label{ font-size:14px; color:var(--muted); text-shadow:0 1px 2px rgba(0,0,0,.25) }
+.dock__btn:hover .dock__icon{ transform: translateY(-1px); background: rgba(11,18,32,.92) }
 .dock__btn:active .dock__icon{ transform: translateY(0) }
+.dock__btn:focus-visible .dock__icon{ border-color:var(--accent); box-shadow:0 0 0 3px rgba(147,197,253,.25) }
 
 @media (max-width:460px){
   .dock__icon{ width:60px; height:60px; font-size:26px }
   .dock__label{ font-size:13px }
 }
 
+/* кнопка-підказка прокрутки */
+.scroll-cue{
+  margin-top: clamp(18px, 3.2vw, 26px);
+  border:1px solid var(--ring);
+  background: rgba(11,18,32,.78);
+  color:#fff;
+  border-radius: 999px;
+  padding: 8px 14px;
+  cursor: pointer;
+  backdrop-filter: blur(6px) saturate(120%);
+}
+.scroll-cue:hover{ background: rgba(11,18,32,.92) }
+.scroll-cue:focus-visible{ outline: 3px solid rgba(147,197,253,.35) }
+
+/* 1px «заплатка» — прибирає світлий шов під геро на деяких екранах */
+.hero__seam{ position:absolute; left:0; right:0; bottom:-1px; height:1px; background: var(--bg-soft) }
+
 /* ---------- СЕКЦІЇ ---------- */
 .content-block{
   background: var(--bg-soft);
   border-top: 1px solid rgba(255,255,255,.08);
 }
-.wrap{
-  max-width: 1000px; margin: 0 auto;
-  padding: min(9vh, 72px) 16px;
-}
+.wrap{ max-width: 1000px; margin: 0 auto; padding: min(9vh, 72px) 16px }
 h2{ margin:0 0 10px; font-size: clamp(22px, 3.5vw, 32px) }
 p { margin: 0; color: var(--muted) }
 
 .btn{
   display:inline-flex; align-items:center; justify-content:center;
   padding: 10px 16px; margin-top: 16px;
-  color:#fff; background: rgba(11,18,32,.75);
+  color:#fff; background: rgba(11,18,32,.78);
   border:1px solid var(--ring); border-radius: 12px;
-  backdrop-filter: blur(6px) saturate(120%);
-  cursor:pointer;
+  backdrop-filter: blur(6px) saturate(120%); cursor:pointer;
 }
-.btn:hover{ background: rgba(11,18,32,.9) }
+.btn:hover{ background: rgba(11,18,32,.92) }
 .btn:focus-visible{ outline: 3px solid rgba(147,197,253,.35) }
 
-.contacts{ margin:0; padding-left: 18px; color: var(--muted) }
-.contacts li{ margin: 6px 0 }
-
-.footer{
-  border-top: 1px solid rgba(255,255,255,.08);
-  color: #9fb0c3;
-  background: #0a101b;
-}
+.footer{ border-top:1px solid rgba(255,255,255,.08); background:#0a101b; color:#9fb0c3 }
 .footer .wrap{ padding: 22px 16px }
-
 
 
