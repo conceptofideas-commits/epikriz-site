@@ -1,6 +1,7 @@
 :root{
-  /* Базовая палитра (светло-оливковый фон как на постере + мягкий текст) */
-  --page-bg:#0e1613;      /* цвет «полос» сбоку при letterbox */
+  /* цвет «полей», если картинка вписывается без кропа (contain) */
+  --page-bg:#0e1613;
+
   --text:#ffffff;
   --muted:rgba(255,255,255,.86);
 
@@ -12,7 +13,7 @@
   --radius:16px;
 }
 
-/* Сброс/база */
+/* базовый reset */
 *{ box-sizing:border-box }
 html,body{ margin:0; height:100% }
 body{
@@ -24,31 +25,35 @@ body{
 /* ===== HERO ===== */
 .hero{
   position:relative;
-  /* Реальная высота экрана, чтобы не «подрезало» на мобильных */
+
+  /* универсальная высота — работает даже во встраиваемых webview */
+  min-height:calc(var(--vh, 1vh) * 100);
+  /* современные браузеры */
   min-height:100svh;
-  /* Фолбэк для старых браузеров */
   min-height:100dvh;
+
   isolation:isolate;
   overflow:hidden;
-  background:var(--page-bg);  /* цвет «полей» при letterbox */
+  background:var(--page-bg);
 }
 
-/* Медиа-слой */
-.hero__media{
-  position:absolute; inset:0;
-}
+.hero__media{ position:absolute; inset:0 }
 .hero__media > img{
   width:100%;
   height:100%;
-  /* ВАЖНО: показываем постер целиком без кропа */
-  object-fit:contain;
-  object-position:center center;
-  /* немного подчистим постер, но без «выжигания» */
+  object-fit:contain;             /* показываем постер полностью */
+  object-position:center center;  /* по умолчанию центр-центр */
   filter:saturate(1) brightness(1.02) contrast(1.02);
 }
 
-/* Оверлей — сверху почти прозрачный, внизу чуть темнее,
-   чтобы сами наши заголовки/кнопки читались и не «давили» постер */
+/* ── ВАЖНО: на широких экранах «прижать» низ постера к низу окна ── */
+@media (min-aspect-ratio: 5/4){
+  .hero__media > img{
+    object-position:center bottom;
+  }
+}
+
+/* мягкий градиент для читабельности кнопок */
 .hero::before{
   content:"";
   position:absolute; inset:0;
@@ -62,7 +67,7 @@ body{
   pointer-events:none;
 }
 
-/* Центрируем наш заголовок (он маленький, чтобы не перекрывать постер) */
+/* центрированный заголовок */
 .hero__center{
   position:absolute; inset:0;
   display:grid; place-items:center;
@@ -72,25 +77,24 @@ body{
 .hero__title{
   margin:0 0 .35rem;
   font-weight:800;
-  /* На телефоне не раздуваем — используем clamp */
-  font-size: clamp(20px, 5.5vw, 48px);
+  font-size:clamp(20px,5.5vw,48px);
   letter-spacing:.3px;
-  text-shadow: 0 2px 12px rgba(0,0,0,.25);
+  text-shadow:0 2px 12px rgba(0,0,0,.25);
 }
 .hero__subtitle{
   margin:0;
   color:var(--muted);
-  font-size: clamp(13px, 3.6vw, 20px);
-  text-shadow: 0 1px 8px rgba(0,0,0,.25);
+  font-size:clamp(13px,3.6vw,20px);
+  text-shadow:0 1px 8px rgba(0,0,0,.25);
 }
 
-/* Док-панель (иконки-кнопки) */
+/* док-панель с кнопками */
 .hero__dock{
   position:absolute; left:0; right:0; bottom:0;
   display:flex; gap:14px; justify-content:center; align-items:flex-end;
-  padding:clamp(10px,2.8vw,18px);
-  /* учитываем safe-area (iOS) */
-  padding-bottom: calc(clamp(10px,2.8vw,18px) + env(safe-area-inset-bottom,0px));
+  padding:clamp(8px,2.4vw,16px);
+  /* меньше отступа снизу + safe-area */
+  padding-bottom:calc(clamp(6px,2vw,12px) + env(safe-area-inset-bottom,0px));
 }
 .dock__btn{
   --size:68px;
@@ -103,15 +107,13 @@ body{
   border-radius:20px;
   background:var(--dock-bg);
   border:1px solid var(--ring);
-  backdrop-filter: blur(8px) saturate(120%);
-  transition: background .18s ease, transform .18s ease, border-color .18s ease, box-shadow .18s ease;
+  backdrop-filter:blur(8px) saturate(120%);
+  transition:background .18s ease, transform .18s ease, border-color .18s ease, box-shadow .18s ease;
 }
 .dock__label{
   font-size:14px; color:var(--muted);
   text-shadow:0 1px 2px rgba(0,0,0,.25);
 }
-
-/* Hover/focus */
 .dock__btn:focus-visible .dock__icon{
   border-color:var(--accent);
   box-shadow:0 0 0 3px rgba(147,197,253,.28);
@@ -119,23 +121,22 @@ body{
 .dock__btn:hover .dock__icon{ background:var(--dock-hover); transform:translateY(-1px) }
 .dock__btn:active .dock__icon{ transform:translateY(0) }
 
-/* Секции ниже */
+/* ===== СЕКЦИИ НИЖЕ ===== */
 .section{
-  background:#0b1220;
-  border-top:1px solid rgba(255,255,255,.08);
-  padding:min(9vh, 72px) 16px;
+  background:#dfe7df;            /* мягкий светлый фон под постер */
+  border-top:1px solid rgba(0,0,0,.05);
+  padding:32px 16px 48px;        /* меньше верхний отступ, чтобы «стык» был плотнее */
 }
-.section__wrap{ max-width: 1000px; margin: 0 auto }
-.section h2{ margin:0 0 10px; font-size: clamp(22px, 3.5vw, 32px) }
-.section p{ margin:0; color: rgba(255,255,255,.8) }
+.section__wrap{ max-width:1000px; margin:0 auto }
+.section h2{ margin:0 0 10px; color:#0b1a12; font-size:clamp(22px,3.5vw,32px) }
+.section p{ margin:0; color:#27342c; font-size:clamp(16px,2.8vw,20px) }
 
-/* Мелкие тюнинги для очень узких экранов */
 @media (max-width:390px){
   .dock__btn{ --size:60px }
   .dock__label{ font-size:13px }
+  .section{ padding:28px 14px 40px }
 }
 
-/* Если пользователь просит «меньше анимаций» — убираем */
 @media (prefers-reduced-motion: reduce){
   .dock__icon{ transition:none }
 }
