@@ -1,204 +1,161 @@
 :root{
-  --bg: #0f172a;         /* фоновий колір сторінки */
-  --text: #e5e7eb;       /* базовий текст */
-  --muted:#a1a7b3;       /* приглушений */
-  --line:#1f2937;        /* лінії/бордери */
-  --btn-bg: rgba(11,18,32,.75);
-  --btn-bg-hover: rgba(11,18,32,.92);
-  --btn-ring: rgba(255,255,255,.18);
-  --radius: 14px;
+  --page-bg: #dfe7d9;           /* фон страницы, в тон твоему постеру */
+  --text:    #0b1220;
+  --muted:   #5b6b6b;
+
+  --overlay-top:   rgba(0,0,0,.18);
+  --overlay-mid:   rgba(0,0,0,.10);
+  --overlay-bot:   rgba(0,0,0,.38); /* внизу темнее — под док/текст */
+
+  --ring:    rgba(0,0,0,.15);
+  --dock-bg: rgba(11,18,32,.58);
+  --dock-hover: rgba(11,18,32,.78);
+  --accent:  #93c5fd;
+
+  --radius: 16px;
 }
 
-/* Базове скидання/типографіка */
+/* базовые */
 *{ box-sizing:border-box }
 html,body{ height:100%; margin:0 }
 body{
-  background:var(--bg);
-  color:var(--text);
+  background: var(--page-bg);
+  color: var(--text);
   font: 16px/1.5 system-ui, -apple-system, Segoe UI, Roboto, Ubuntu, "Helvetica Neue", Arial;
 }
 
-/* ===== HERO ===== */
+/* ===== HERO =====
+   Задача: показать изображение целиком без кропа,
+   аккуратно заполнить поля цветом и слегка притушить для читабельности. */
 .hero{
-  position:relative;
-  min-height:100dvh;              /* “на всю висоту” (підтримує мобільні бари) */
-  isolation:isolate;
-  overflow:hidden;
+  position: relative;
+  min-height: 100svh;        /* на всю высоту вьюпорта, учитывает моб. бары */
+  background: var(--page-bg);/* поля сливаются с постером */
+  isolation: isolate;
+  overflow: hidden;
 }
 
+/* медиа-обёртка */
 .hero__media{
-  position:absolute;
-  inset:0;
-  display:block;
-}
-.hero__media > img{
-  width:100%;
-  height:100%;
-  object-fit:cover;                /* розтягнути на всю ширину/висоту з прирізкою */
-  object-position:center center;
-  filter: saturate(.98) brightness(1.05) contrast(1.02);
+  position: absolute;
+  inset: 0;
+  display: grid;
+  place-items: center;
 }
 
-/* затемнення + м’який градієнт, щоб кнопки читались */
+/* ВАЖНО: показываем изображение целиком */
+.hero__media > img{
+  width: 100%;
+  height: 100%;
+  object-fit: contain;        /* <— вся картинка видна */
+  object-position: center center;
+  /* чуть подчистим контраст, но мягко */
+  filter: saturate(.98) brightness(1.03) contrast(1.02);
+  background: var(--page-bg); /* подложка там, где «письма» по бокам */
+}
+
+/* мягкий градиент. Вверху лёгкий, внизу сильнее */
 .hero::before{
   content:"";
   position:absolute;
   inset:0;
-  background:linear-gradient(
+  background: linear-gradient(
     to bottom,
-    rgba(0,0,0,.10) 0%,
-    rgba(0,0,0,.35) 55%,
-    rgba(0,0,0,.55) 100%
+    var(--overlay-top) 0%,
+    var(--overlay-mid) 40%,
+    var(--overlay-bot) 100%
   );
   pointer-events:none;
 }
 
-/* панель кнопок у нижній частині */
-.hero__nav{
-  position:absolute;
-  left:0; right:0; bottom:0;
-  display:flex;
-  gap:12px;
-  padding: clamp(12px, 2.5vw, 22px);
-  justify-content:center;
-  align-items:center;
-  /* safe-area для iOS */
-  padding-bottom: calc(clamp(12px, 2.5vw, 22px) + env(safe-area-inset-bottom, 0px));
+/* центральный заголовок (если используешь) */
+.hero__center{
+  position: absolute;
+  inset: 0;
+  display: grid;
+  place-items: center;
+  padding: 24px;
+  text-align: center;
+  color: #fff;
+  z-index: 1;
+}
+.hero__title{
+  margin: 0 0 10px;
+  font-weight: 800;
+  letter-spacing: .2px;
+  font-size: clamp(22px, 4vw, 44px);
+  text-shadow: 0 4px 18px rgba(0,0,0,.28);
+}
+.hero__subtitle{
+  margin:0;
+  color: rgba(255,255,255,.9);
+  font-size: clamp(14px, 2vw, 18px);
+  text-shadow: 0 3px 12px rgba(0,0,0,.25);
 }
 
-/* кнопки */
-.hero__btn{
-  --padY: 12px; --padX: 16px;
-  display:inline-flex;
-  align-items:center;
-  justify-content:center;
-  padding: var(--padY) var(--padX);
-  min-width: 160px;
-  border-radius: var(--radius);
-  text-decoration:none;
-  color:#fff;
-  background: var(--btn-bg);
-  border: 1px solid var(--btn-ring);
-  backdrop-filter: blur(6px) saturate(120%);
-  transition: background .18s ease, transform .18s ease, border-color .18s ease;
+/* ===== ДОК с иконками (прозрачные кнопки как на постере) ===== */
+.hero__dock{
+  position: absolute;
+  left: 0; right: 0; bottom: 0;
+  display: flex;
+  gap: 16px;
+  justify-content: center;
+  align-items: flex-end;
+  padding: clamp(12px, 2.8vw, 22px);
+  padding-bottom: calc(clamp(12px, 2.8vw, 22px) + env(safe-area-inset-bottom,0px));
+  z-index: 2;
+}
+
+/* одна кнопка */
+.dock__btn{
+  --size: 72px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 8px;
+  color: #fff;
+  text-decoration: none;
   outline: none;
 }
+.dock__icon{
+  width: var(--size);
+  height: var(--size);
+  display: grid;
+  place-items: center;
+  border-radius: 20px;
+  background: var(--dock-bg);
+  border: 1px solid var(--ring);
+  backdrop-filter: blur(8px) saturate(120%);
+  transition: background .18s ease, transform .18s ease, border-color .18s ease, box-shadow .18s ease;
+}
+.dock__label{
+  font-size: 14px;
+  color: rgba(255,255,255,.92);
+  text-shadow: 0 1px 2px rgba(0,0,0,.25);
+}
 
-/* доступність + фокус */
-.hero__btn:focus-visible{
-  border-color: #93c5fd;
+/* hover/focus */
+.dock__btn:focus-visible .dock__icon{
+  border-color: var(--accent);
   box-shadow: 0 0 0 3px rgba(147,197,253,.25);
 }
-.hero__btn:hover{ background: var(--btn-bg-hover); transform: translateY(-1px) }
-.hero__btn:active{ transform: translateY(0) }
+.dock__btn:hover .dock__icon{ background: var(--dock-hover); transform: translateY(-1px) }
+.dock__btn:active .dock__icon{ transform: translateY(0) }
 
-.hero__btn-label{
-  font-weight:700;
-  letter-spacing:.2px;
-}
-
-/* Секції-мішені */
+/* ===== Секции ниже (если есть) ===== */
 .section{
+  background: var(--page-bg);
+  border-top: 1px solid rgba(0,0,0,.06);
   padding: min(9vh, 72px) 16px;
-  border-top:1px solid var(--line);
-  background: #0b1220;
 }
-.section__wrap{
-  max-width: 1000px;
-  margin: 0 auto;
-}
-.section h2{
-  margin:0 0 8px;
-  font-size: clamp(22px, 3.5vw, 32px);
-}
-.section p{
-  margin:0;
-  color: var(--muted);
-}
+.section__wrap{ max-width: 1000px; margin: 0 auto }
+.section h2{ margin: 0 0 10px; font-size: clamp(22px,3.5vw,32px) }
+.section p{ margin: 0; color: var(--muted) }
 
-/* Зменшити “стрибунину” при анімації для користувачів із reduced motion */
+@media (max-width: 480px){
+  .dock__btn{ --size: 64px }
+  .dock__label{ font-size: 13px }
+}
 @media (prefers-reduced-motion: reduce){
-  .hero__btn{ transition: none }
-}
-/* ===== ДОБАВИТЬ В КОНЕЦ hero.css ===== */
-
-/* делаем перенос на 2 строки при узких экранах */
-.hero__nav{
-  flex-wrap: wrap;
-}
-
-/* саму кнопку — вертикальной (иконка над подписью) */
-.hero__btn{
-  flex-direction: column;
-  gap: 8px;
-  min-width: 120px;       /* чтобы сетка была ровнее */
-  padding: 10px 12px;
-}
-
-/* круглую «пилюлю» под иконку */
-.hero__btn-icon{
-  width: 64px; height: 64px;
-  display: grid; place-items: center;
-  border-radius: 18px;
-  background: var(--btn-bg);
-  border: 1px solid var(--btn-ring);
-  backdrop-filter: blur(8px) saturate(120%);
-  transition: background .18s ease, transform .18s ease, border-color .18s ease, box-shadow .18s ease;
-  color: #ffffff; /* цвет линий SVG */
-}
-
-/* hover/focus на иконке */
-.hero__btn:focus-visible .hero__btn-icon{
-  border-color: #93c5fd;
-  box-shadow: 0 0 0 3px rgba(147,197,253,.25);
-}
-.hero__btn:hover .hero__btn-icon{ background: var(--btn-bg-hover); transform: translateY(-1px) }
-.hero__btn:active .hero__btn-icon{ transform: translateY(0) }
-
-/* подпись под иконкой */
-.hero__btn-label{
-  font-size: 14px;
-  color: var(--muted);
-  text-shadow: 0 1px 2px rgba(0,0,0,.25);
-}
-/* ===== ДОБАВИТЬ В КОНЕЦ hero.css ===== */
-
-/* делаем перенос на 2 строки при узких экранах */
-.hero__nav{
-  flex-wrap: wrap;
-}
-
-/* саму кнопку — вертикальной (иконка над подписью) */
-.hero__btn{
-  flex-direction: column;
-  gap: 8px;
-  min-width: 120px;       /* чтобы сетка была ровнее */
-  padding: 10px 12px;
-}
-
-/* круглую «пилюлю» под иконку */
-.hero__btn-icon{
-  width: 64px; height: 64px;
-  display: grid; place-items: center;
-  border-radius: 18px;
-  background: var(--btn-bg);
-  border: 1px solid var(--btn-ring);
-  backdrop-filter: blur(8px) saturate(120%);
-  transition: background .18s ease, transform .18s ease, border-color .18s ease, box-shadow .18s ease;
-  color: #ffffff; /* цвет линий SVG */
-}
-
-/* hover/focus на иконке */
-.hero__btn:focus-visible .hero__btn-icon{
-  border-color: #93c5fd;
-  box-shadow: 0 0 0 3px rgba(147,197,253,.25);
-}
-.hero__btn:hover .hero__btn-icon{ background: var(--btn-bg-hover); transform: translateY(-1px) }
-.hero__btn:active .hero__btn-icon{ transform: translateY(0) }
-
-/* подпись под иконкой */
-.hero__btn-label{
-  font-size: 14px;
-  color: var(--muted);
-  text-shadow: 0 1px 2px rgba(0,0,0,.25);
+  .dock__icon{ transition: none }
 }
