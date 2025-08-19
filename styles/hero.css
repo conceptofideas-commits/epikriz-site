@@ -161,3 +161,44 @@ body{
   color: var(--muted);
   text-shadow: 0 1px 2px rgba(0,0,0,.25);
 }
+/* ===== ДОБАВИТЬ В КОНЕЦ hero.css ===== */
+
+/* делаем перенос на 2 строки при узких экранах */
+.hero__nav{
+  flex-wrap: wrap;
+}
+
+/* саму кнопку — вертикальной (иконка над подписью) */
+.hero__btn{
+  flex-direction: column;
+  gap: 8px;
+  min-width: 120px;       /* чтобы сетка была ровнее */
+  padding: 10px 12px;
+}
+
+/* круглую «пилюлю» под иконку */
+.hero__btn-icon{
+  width: 64px; height: 64px;
+  display: grid; place-items: center;
+  border-radius: 18px;
+  background: var(--btn-bg);
+  border: 1px solid var(--btn-ring);
+  backdrop-filter: blur(8px) saturate(120%);
+  transition: background .18s ease, transform .18s ease, border-color .18s ease, box-shadow .18s ease;
+  color: #ffffff; /* цвет линий SVG */
+}
+
+/* hover/focus на иконке */
+.hero__btn:focus-visible .hero__btn-icon{
+  border-color: #93c5fd;
+  box-shadow: 0 0 0 3px rgba(147,197,253,.25);
+}
+.hero__btn:hover .hero__btn-icon{ background: var(--btn-bg-hover); transform: translateY(-1px) }
+.hero__btn:active .hero__btn-icon{ transform: translateY(0) }
+
+/* подпись под иконкой */
+.hero__btn-label{
+  font-size: 14px;
+  color: var(--muted);
+  text-shadow: 0 1px 2px rgba(0,0,0,.25);
+}
