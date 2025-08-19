@@ -1,59 +1,89 @@
 <!DOCTYPE html>
 <html lang="uk">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
   <title>Epikriz — Медичний архів</title>
-  <link rel="stylesheet" href="style.css">
+
+  <!-- основні мета -->
+  <meta name="description" content="Персональний медичний архів: збереження досліджень, результатів і документів." />
+  <meta name="theme-color" content="#0f172a" />
+  <meta property="og:image" content="/assets/hero-poster.webp" />
+
+  <!-- стилі сайту -->
+  <link rel="stylesheet" href="styles/site.css" />
 </head>
 <body>
-  <!-- Шапка -->
-  <header class="hero">
-    <div class="hero-overlay">
-      <img src="hero-poster.webp" alt="Медичний постер" class="hero-image">
-      <h1 class="hero-title">Epikriz</h1>
-      <p class="hero-subtitle">Персональний медичний архів</p>
+
+  <!-- HERO (повноекранне зображення, без зайвих блоків) -->
+  <header class="hero" id="home" aria-label="Обкладинка">
+    <div class="hero__media" aria-hidden="true">
+      <picture>
+        <source srcset="/assets/hero-poster.webp" type="image/webp" />
+        <img src="/assets/hero-poster.png" alt="" />
+      </picture>
+    </div>
+
+    <div class="hero__content">
+      <h1 class="hero__title">Epikriz</h1>
+      <p class="hero__subtitle">Персональний медичний архів</p>
+
+      <nav class="hero__dock" aria-label="Швидка навігація">
+        <a class="dock__btn" href="#about" data-target="#about">
+          <span class="dock__icon" aria-hidden="true">+</span>
+          <span class="dock__label">Про сайт</span>
+        </a>
+        <a class="dock__btn" href="#archive" data-target="#archive">
+          <span class="dock__icon" aria-hidden="true">↯</span>
+          <span class="dock__label">Архів</span>
+        </a>
+      </nav>
     </div>
   </header>
 
-  <!-- Навігація -->
-  <nav class="navbar">
-    <ul>
-      <li><a href="#about">Про сайт</a></li>
-      <li><a href="#archive">Архів</a></li>
-      <li><a href="#contacts">Контакти</a></li>
-    </ul>
-  </nav>
-
-  <!-- Про сайт -->
+  <!-- ПРО САЙТ -->
   <section id="about" class="content-block">
-    <h2>Про сайт</h2>
-    <p>Epikriz — це зручне місце для збереження ваших медичних досліджень, діагнозів та історії лікування. Ви отримуєте структурований архів, який завжди під рукою.</p>
+    <div class="wrap">
+      <h2>Про сайт</h2>
+      <p>
+        Epikriz — це зручне місце для збереження ваших медичних досліджень,
+        діагнозів та історії лікування. Ви отримуєте структурований архів,
+        який завжди під рукою.
+      </p>
+    </div>
   </section>
 
-  <!-- Архів -->
+  <!-- АРХІВ -->
   <section id="archive" class="content-block">
-    <h2>Архів</h2>
-    <p>У цьому розділі можна переглянути ваші МРТ, КТ, УЗД, результати аналізів та інші дані.</p>
-    <button id="open-archive">Відкрити архів</button>
+    <div class="wrap">
+      <h2>Архів</h2>
+      <p>
+        У цьому розділі можна переглянути МРТ/КТ/УЗД, результати аналізів та інші дані.
+      </p>
+      <button id="open-archive" class="btn">Відкрити архів</button>
+    </div>
   </section>
 
-  <!-- Контакти -->
+  <!-- КОНТАКТИ -->
   <section id="contacts" class="content-block">
-    <h2>Контакти</h2>
-    <p>Якщо у вас є питання або пропозиції — напишіть нам:</p>
-    <ul>
-      <li>Email: support@epikriz.info</li>
-      <li>Telegram: @epikriz_support</li>
-    </ul>
+    <div class="wrap">
+      <h2>Контакти</h2>
+      <ul class="contacts">
+        <li>Email: support@epikriz.info</li>
+        <li>Telegram: @epikriz_support</li>
+      </ul>
+    </div>
   </section>
 
-  <!-- Футер -->
-  <footer>
-    <p>&copy; 2025 Epikriz. Всі права захищені.</p>
+  <footer class="footer">
+    <div class="wrap">
+      © 2025 Epikriz
+    </div>
   </footer>
 
-  <script src="script.js"></script>
+  <!-- скрипти -->
+  <script type="module" src="scripts/site.js"></script>
 </body>
 </html>
+
 
