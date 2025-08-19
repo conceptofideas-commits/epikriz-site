@@ -1,161 +1,143 @@
 :root{
-  --page-bg: #dfe7d9;           /* фон страницы, в тон твоему постеру */
-  --text:    #0b1220;
-  --muted:   #5b6b6b;
+  /* Базовая палитра (светло-оливковый фон как на постере + мягкий текст) */
+  --page-bg:#0e1613;      /* цвет «полос» сбоку при letterbox */
+  --text:#ffffff;
+  --muted:rgba(255,255,255,.86);
 
-  --overlay-top:   rgba(0,0,0,.18);
-  --overlay-mid:   rgba(0,0,0,.10);
-  --overlay-bot:   rgba(0,0,0,.38); /* внизу темнее — под док/текст */
+  --dock-bg:rgba(15,23,42,.55);
+  --dock-hover:rgba(15,23,42,.78);
+  --ring:rgba(255,255,255,.24);
+  --accent:#93c5fd;
 
-  --ring:    rgba(0,0,0,.15);
-  --dock-bg: rgba(11,18,32,.58);
-  --dock-hover: rgba(11,18,32,.78);
-  --accent:  #93c5fd;
-
-  --radius: 16px;
+  --radius:16px;
 }
 
-/* базовые */
+/* Сброс/база */
 *{ box-sizing:border-box }
-html,body{ height:100%; margin:0 }
+html,body{ margin:0; height:100% }
 body{
-  background: var(--page-bg);
-  color: var(--text);
-  font: 16px/1.5 system-ui, -apple-system, Segoe UI, Roboto, Ubuntu, "Helvetica Neue", Arial;
+  background:var(--page-bg);
+  color:var(--text);
+  font:16px/1.5 system-ui,-apple-system,Segoe UI,Roboto,Ubuntu,"Helvetica Neue",Arial;
 }
 
-/* ===== HERO =====
-   Задача: показать изображение целиком без кропа,
-   аккуратно заполнить поля цветом и слегка притушить для читабельности. */
+/* ===== HERO ===== */
 .hero{
-  position: relative;
-  min-height: 100svh;        /* на всю высоту вьюпорта, учитывает моб. бары */
-  background: var(--page-bg);/* поля сливаются с постером */
-  isolation: isolate;
-  overflow: hidden;
+  position:relative;
+  /* Реальная высота экрана, чтобы не «подрезало» на мобильных */
+  min-height:100svh;
+  /* Фолбэк для старых браузеров */
+  min-height:100dvh;
+  isolation:isolate;
+  overflow:hidden;
+  background:var(--page-bg);  /* цвет «полей» при letterbox */
 }
 
-/* медиа-обёртка */
+/* Медиа-слой */
 .hero__media{
-  position: absolute;
-  inset: 0;
-  display: grid;
-  place-items: center;
+  position:absolute; inset:0;
 }
-
-/* ВАЖНО: показываем изображение целиком */
 .hero__media > img{
-  width: 100%;
-  height: 100%;
-  object-fit: contain;        /* <— вся картинка видна */
-  object-position: center center;
-  /* чуть подчистим контраст, но мягко */
-  filter: saturate(.98) brightness(1.03) contrast(1.02);
-  background: var(--page-bg); /* подложка там, где «письма» по бокам */
+  width:100%;
+  height:100%;
+  /* ВАЖНО: показываем постер целиком без кропа */
+  object-fit:contain;
+  object-position:center center;
+  /* немного подчистим постер, но без «выжигания» */
+  filter:saturate(1) brightness(1.02) contrast(1.02);
 }
 
-/* мягкий градиент. Вверху лёгкий, внизу сильнее */
+/* Оверлей — сверху почти прозрачный, внизу чуть темнее,
+   чтобы сами наши заголовки/кнопки читались и не «давили» постер */
 .hero::before{
   content:"";
-  position:absolute;
-  inset:0;
-  background: linear-gradient(
+  position:absolute; inset:0;
+  background:linear-gradient(
     to bottom,
-    var(--overlay-top) 0%,
-    var(--overlay-mid) 40%,
-    var(--overlay-bot) 100%
+    rgba(0,0,0,.04) 0%,
+    rgba(0,0,0,.10) 35%,
+    rgba(0,0,0,.24) 70%,
+    rgba(0,0,0,.34) 100%
   );
   pointer-events:none;
 }
 
-/* центральный заголовок (если используешь) */
+/* Центрируем наш заголовок (он маленький, чтобы не перекрывать постер) */
 .hero__center{
-  position: absolute;
-  inset: 0;
-  display: grid;
-  place-items: center;
-  padding: 24px;
-  text-align: center;
-  color: #fff;
-  z-index: 1;
+  position:absolute; inset:0;
+  display:grid; place-items:center;
+  padding:clamp(12px,3vw,28px);
+  text-align:center;
 }
 .hero__title{
-  margin: 0 0 10px;
-  font-weight: 800;
-  letter-spacing: .2px;
-  font-size: clamp(22px, 4vw, 44px);
-  text-shadow: 0 4px 18px rgba(0,0,0,.28);
+  margin:0 0 .35rem;
+  font-weight:800;
+  /* На телефоне не раздуваем — используем clamp */
+  font-size: clamp(20px, 5.5vw, 48px);
+  letter-spacing:.3px;
+  text-shadow: 0 2px 12px rgba(0,0,0,.25);
 }
 .hero__subtitle{
   margin:0;
-  color: rgba(255,255,255,.9);
-  font-size: clamp(14px, 2vw, 18px);
-  text-shadow: 0 3px 12px rgba(0,0,0,.25);
+  color:var(--muted);
+  font-size: clamp(13px, 3.6vw, 20px);
+  text-shadow: 0 1px 8px rgba(0,0,0,.25);
 }
 
-/* ===== ДОК с иконками (прозрачные кнопки как на постере) ===== */
+/* Док-панель (иконки-кнопки) */
 .hero__dock{
-  position: absolute;
-  left: 0; right: 0; bottom: 0;
-  display: flex;
-  gap: 16px;
-  justify-content: center;
-  align-items: flex-end;
-  padding: clamp(12px, 2.8vw, 22px);
-  padding-bottom: calc(clamp(12px, 2.8vw, 22px) + env(safe-area-inset-bottom,0px));
-  z-index: 2;
+  position:absolute; left:0; right:0; bottom:0;
+  display:flex; gap:14px; justify-content:center; align-items:flex-end;
+  padding:clamp(10px,2.8vw,18px);
+  /* учитываем safe-area (iOS) */
+  padding-bottom: calc(clamp(10px,2.8vw,18px) + env(safe-area-inset-bottom,0px));
 }
-
-/* одна кнопка */
 .dock__btn{
-  --size: 72px;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  gap: 8px;
-  color: #fff;
-  text-decoration: none;
-  outline: none;
+  --size:68px;
+  display:flex; flex-direction:column; align-items:center; gap:8px;
+  text-decoration:none; color:#fff; outline:none;
 }
 .dock__icon{
-  width: var(--size);
-  height: var(--size);
-  display: grid;
-  place-items: center;
-  border-radius: 20px;
-  background: var(--dock-bg);
-  border: 1px solid var(--ring);
+  width:var(--size); height:var(--size);
+  display:grid; place-items:center;
+  border-radius:20px;
+  background:var(--dock-bg);
+  border:1px solid var(--ring);
   backdrop-filter: blur(8px) saturate(120%);
   transition: background .18s ease, transform .18s ease, border-color .18s ease, box-shadow .18s ease;
 }
 .dock__label{
-  font-size: 14px;
-  color: rgba(255,255,255,.92);
-  text-shadow: 0 1px 2px rgba(0,0,0,.25);
+  font-size:14px; color:var(--muted);
+  text-shadow:0 1px 2px rgba(0,0,0,.25);
 }
 
-/* hover/focus */
+/* Hover/focus */
 .dock__btn:focus-visible .dock__icon{
-  border-color: var(--accent);
-  box-shadow: 0 0 0 3px rgba(147,197,253,.25);
+  border-color:var(--accent);
+  box-shadow:0 0 0 3px rgba(147,197,253,.28);
 }
-.dock__btn:hover .dock__icon{ background: var(--dock-hover); transform: translateY(-1px) }
-.dock__btn:active .dock__icon{ transform: translateY(0) }
+.dock__btn:hover .dock__icon{ background:var(--dock-hover); transform:translateY(-1px) }
+.dock__btn:active .dock__icon{ transform:translateY(0) }
 
-/* ===== Секции ниже (если есть) ===== */
+/* Секции ниже */
 .section{
-  background: var(--page-bg);
-  border-top: 1px solid rgba(0,0,0,.06);
-  padding: min(9vh, 72px) 16px;
+  background:#0b1220;
+  border-top:1px solid rgba(255,255,255,.08);
+  padding:min(9vh, 72px) 16px;
 }
 .section__wrap{ max-width: 1000px; margin: 0 auto }
-.section h2{ margin: 0 0 10px; font-size: clamp(22px,3.5vw,32px) }
-.section p{ margin: 0; color: var(--muted) }
+.section h2{ margin:0 0 10px; font-size: clamp(22px, 3.5vw, 32px) }
+.section p{ margin:0; color: rgba(255,255,255,.8) }
 
-@media (max-width: 480px){
-  .dock__btn{ --size: 64px }
-  .dock__label{ font-size: 13px }
+/* Мелкие тюнинги для очень узких экранов */
+@media (max-width:390px){
+  .dock__btn{ --size:60px }
+  .dock__label{ font-size:13px }
 }
+
+/* Если пользователь просит «меньше анимаций» — убираем */
 @media (prefers-reduced-motion: reduce){
-  .dock__icon{ transition: none }
+  .dock__icon{ transition:none }
 }
+
+
