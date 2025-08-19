@@ -136,6 +136,9 @@ body{
   .dock__label{ font-size:13px }
   .section{ padding:28px 14px 40px }
 }
+.content-block {
+  display: none;
+}
 
 @media (prefers-reduced-motion: reduce){
   .dock__icon{ transition:none }
