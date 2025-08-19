@@ -4,118 +4,102 @@
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width,initial-scale=1" />
   <title>Medical Portfolio</title>
-  <style>
-    * {
-      margin: 0;
-      padding: 0;
-      box-sizing: border-box;
-    }
+  <meta name="description" content="Мої медичні записи та дослідження в одному місці" />
+  <meta name="theme-color" content="#dfe7d9" />
 
-    body, html {
-      height: 100%;
-      font-family: Arial, sans-serif;
-    }
+  <!-- Предзагрузка фонового постера -->
+  <link rel="preload" as="image" href="/assets/hero-poster.webp" imagesrcset="/assets/hero-poster.webp 1x, /assets/hero-poster.png 1x" imagesizes="100vw" />
 
-    .hero {
-      position: relative;
-      width: 100%;
-      height: 100vh; /* на весь екран */
-      overflow: hidden;
-    }
-
-    .hero picture,
-    .hero img {
-      position: absolute;
-      width: 100%;
-      height: 100%;
-      object-fit: cover; /* розтягує картинку */
-    }
-
-    /* Затемнення поверх */
-    .hero::after {
-      content: "";
-      position: absolute;
-      inset: 0;
-      background: linear-gradient(
-        rgba(0, 0, 0, 0.6) 0%,   
-        rgba(0, 0, 0, 0.3) 40%, 
-        rgba(0, 0, 0, 0.7) 100%
-      );
-      z-index: 0;
-    }
-
-    .hero-content {
-      position: relative;
-      z-index: 1;
-      color: #fff;
-      text-align: center;
-      top: 50%;
-      transform: translateY(-50%);
-      padding: 20px;
-    }
-
-    .hero-content h1 {
-      font-size: 3rem;
-      margin-bottom: 15px;
-    }
-
-    .hero-content p {
-      font-size: 1.5rem;
-      opacity: 0.9;
-    }
-
-    /* Панель кнопок */
-    .hero-buttons {
-      position: absolute;
-      bottom: 20px;
-      left: 50%;
-      transform: translateX(-50%);
-      display: flex;
-      gap: 20px;
-      z-index: 2;
-    }
-
-    .hero-buttons button {
-      padding: 12px 24px;
-      border: none;
-      border-radius: 6px;
-      background: rgba(255, 255, 255, 0.85);
-      color: #333;
-      font-size: 1rem;
-      cursor: pointer;
-      transition: all 0.3s ease;
-    }
-
-    .hero-buttons button:hover {
-      background: #00aaff;
-      color: #fff;
-    }
-  </style>
+  <!-- Стили hero (заменённый файл из предыдущего сообщения) -->
+  <link rel="stylesheet" href="styles/hero.css" />
 </head>
 <body>
-  <section class="hero">
-    <picture>
-      <!-- Основне: webp -->
-      <source srcset="assets/hero-poster.webp" type="image/webp">
-      <!-- Запасний варіант: png -->
-      <source srcset="assets/hero-poster.png" type="image/png">
-      <!-- Fallback -->
-      <img src="assets/hero-poster.png" alt="Medical Portfolio background">
+
+  <!-- ===== HERO fullscreen ===== -->
+  <header class="hero" id="home" aria-label="Обкладинка сторінки">
+    <!-- Изображение показываем ЦЕЛИКОМ (object-fit: contain) -->
+    <picture class="hero__media" aria-hidden="true">
+      <source srcset="/assets/hero-poster.webp" type="image/webp" />
+      <img src="/assets/hero-poster.png" alt="" />
     </picture>
 
-    <div class="hero-content">
-      <h1>Medical Portfolio</h1>
-      <p>Мої медичні записи та дослідження в одному місці</p>
+    <!-- Центрированный заголовок -->
+    <div class="hero__center" role="presentation">
+      <div>
+        <h1 class="hero__title">Medical Portfolio</h1>
+        <p class="hero__subtitle">Мої медичні записи та дослідження в одному місці</p>
+      </div>
     </div>
 
-    <!-- Кнопки -->
-    <div class="hero-buttons">
-      <button id="btn-healthcare">Healthcare</button>
-      <button id="btn-exam">Health exam</button>
-    </div>
-  </section>
+    <!-- Прозрачная док-панель с кнопками/иконками внизу -->
+    <nav class="hero__dock" aria-label="Основна навігація">
+      <!-- Кнопка 1: Healthcare -->
+      <a class="dock__btn" href="#healthcare" data-target="#healthcare">
+        <span class="dock__icon" aria-hidden="true">
+          <!-- крест (символ медицины) -->
+          <svg viewBox="0 0 24 24" width="28" height="28" fill="none" stroke="currentColor" stroke-width="2">
+            <path d="M12 5v14M5 12h14"/>
+          </svg>
+        </span>
+        <span class="dock__label">Healthcare</span>
+      </a>
 
-  <!-- JS-підключення -->
-  <script src="script.js"></script>
+      <!-- Кнопка 2: Health exam -->
+      <a class="dock__btn" href="#exam" data-target="#exam">
+        <span class="dock__icon" aria-hidden="true">
+          <!-- стетоскоп -->
+          <svg viewBox="0 0 24 24" width="28" height="28" fill="none" stroke="currentColor" stroke-width="2">
+            <path d="M6 4v6a6 6 0 0 0 12 0V4"/>
+            <circle cx="18" cy="18" r="3"/>
+            <path d="M9 20h4"/>
+          </svg>
+        </span>
+        <span class="dock__label">Health exam</span>
+      </a>
+    </nav>
+  </header>
+
+  <!-- ===== Контент секций (якоря) ===== -->
+  <main id="content">
+    <section id="healthcare" class="section" aria-labelledby="healthcare-title">
+      <div class="section__wrap">
+        <h2 id="healthcare-title">Healthcare</h2>
+        <p>Опис блоку про медичну систему, маршрути пацієнта, профілактику тощо.</p>
+      </div>
+    </section>
+
+    <section id="exam" class="section" aria-labelledby="exam-title">
+      <div class="section__wrap">
+        <h2 id="exam-title">Health exam</h2>
+        <p>Обстеження: МРТ/КТ/УЗД, аналізи, підготовка, результати.</p>
+      </div>
+    </section>
+  </main>
+
+  <!-- Плавный скролл по кнопкам (работает как прогрессивное улучшение) -->
+  <script type="module">
+    class DockNav {
+      constructor(root = document.querySelector('.hero__dock')) {
+        this.root = root;
+        if (!this.root) return;
+        this.links = Array.from(this.root.querySelectorAll('.dock__btn'));
+        this.bind();
+      }
+      bind() {
+        this.links.forEach(link => {
+          link.addEventListener('click', (e) => {
+            const sel = link.getAttribute('data-target');
+            if (!sel) return;                    // обычный якорь
+            const target = document.querySelector(sel);
+            if (!target) return;
+            e.preventDefault();
+            const top = target.getBoundingClientRect().top + window.scrollY;
+            window.scrollTo({ top: Math.max(0, top - 6), behavior: 'smooth' });
+          }, { passive:false });
+        });
+      }
+    }
+    document.addEventListener('DOMContentLoaded', () => new DockNav());
+  </script>
 </body>
 </html>
