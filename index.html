@@ -1,105 +1,58 @@
-<!doctype html>
+<!DOCTYPE html>
 <html lang="uk">
 <head>
-  <meta charset="utf-8" />
-  <meta name="viewport" content="width=device-width,initial-scale=1" />
-  <title>Medical Portfolio</title>
-  <meta name="description" content="Мої медичні записи та дослідження в одному місці" />
-  <meta name="theme-color" content="#dfe7d9" />
-
-  <!-- Предзагрузка фонового постера -->
-  <link rel="preload" as="image" href="/assets/hero-poster.webp" imagesrcset="/assets/hero-poster.webp 1x, /assets/hero-poster.png 1x" imagesizes="100vw" />
-
-  <!-- Стили hero (заменённый файл из предыдущего сообщения) -->
-  <link rel="stylesheet" href="styles/hero.css" />
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Epikriz — Медичний архів</title>
+  <link rel="stylesheet" href="style.css">
 </head>
 <body>
-
-  <!-- ===== HERO fullscreen ===== -->
-  <header class="hero" id="home" aria-label="Обкладинка сторінки">
-    <!-- Изображение показываем ЦЕЛИКОМ (object-fit: contain) -->
-    <picture class="hero__media" aria-hidden="true">
-      <source srcset="/assets/hero-poster.webp" type="image/webp" />
-      <img src="/assets/hero-poster.png" alt="" />
-    </picture>
-
-    <!-- Центрированный заголовок -->
-    <div class="hero__center" role="presentation">
-      <div>
-        <h1 class="hero__title">Medical Portfolio</h1>
-        <p class="hero__subtitle">Мої медичні записи та дослідження в одному місці</p>
-      </div>
+  <!-- Шапка -->
+  <header class="hero">
+    <div class="hero-overlay">
+      <img src="hero-poster.webp" alt="Медичний постер" class="hero-image">
+      <h1 class="hero-title">Epikriz</h1>
+      <p class="hero-subtitle">Персональний медичний архів</p>
     </div>
-
-    <!-- Прозрачная док-панель с кнопками/иконками внизу -->
-    <nav class="hero__dock" aria-label="Основна навігація">
-      <!-- Кнопка 1: Healthcare -->
-      <a class="dock__btn" href="#healthcare" data-target="#healthcare">
-        <span class="dock__icon" aria-hidden="true">
-          <!-- крест (символ медицины) -->
-          <svg viewBox="0 0 24 24" width="28" height="28" fill="none" stroke="currentColor" stroke-width="2">
-            <path d="M12 5v14M5 12h14"/>
-          </svg>
-        </span>
-        <span class="dock__label">Healthcare</span>
-      </a>
-
-      <!-- Кнопка 2: Health exam -->
-      <a class="dock__btn" href="#exam" data-target="#exam">
-        <span class="dock__icon" aria-hidden="true">
-          <!-- стетоскоп -->
-          <svg viewBox="0 0 24 24" width="28" height="28" fill="none" stroke="currentColor" stroke-width="2">
-            <path d="M6 4v6a6 6 0 0 0 12 0V4"/>
-            <circle cx="18" cy="18" r="3"/>
-            <path d="M9 20h4"/>
-          </svg>
-        </span>
-        <span class="dock__label">Health exam</span>
-      </a>
-    </nav>
   </header>
 
-  <!-- ===== Контент секций (якоря) ===== -->
-  <main id="content">
-    <section id="healthcare" class="section" aria-labelledby="healthcare-title">
-      <div class="section__wrap">
-        <h2 id="healthcare-title">Healthcare</h2>
-        <p>Опис блоку про медичну систему, маршрути пацієнта, профілактику тощо.</p>
-      </div>
-    </section>
+  <!-- Навігація -->
+  <nav class="navbar">
+    <ul>
+      <li><a href="#about">Про сайт</a></li>
+      <li><a href="#archive">Архів</a></li>
+      <li><a href="#contacts">Контакти</a></li>
+    </ul>
+  </nav>
 
-    <section id="exam" class="section" aria-labelledby="exam-title">
-      <div class="section__wrap">
-        <h2 id="exam-title">Health exam</h2>
-        <p>Обстеження: МРТ/КТ/УЗД, аналізи, підготовка, результати.</p>
-      </div>
-    </section>
-  </main>
+  <!-- Про сайт -->
+  <section id="about" class="content-block">
+    <h2>Про сайт</h2>
+    <p>Epikriz — це зручне місце для збереження ваших медичних досліджень, діагнозів та історії лікування. Ви отримуєте структурований архів, який завжди під рукою.</p>
+  </section>
 
-  <!-- Плавный скролл по кнопкам (работает как прогрессивное улучшение) -->
-  <script type="module">
-    class DockNav {
-      constructor(root = document.querySelector('.hero__dock')) {
-        this.root = root;
-        if (!this.root) return;
-        this.links = Array.from(this.root.querySelectorAll('.dock__btn'));
-        this.bind();
-      }
-      bind() {
-        this.links.forEach(link => {
-          link.addEventListener('click', (e) => {
-            const sel = link.getAttribute('data-target');
-            if (!sel) return;                    // обычный якорь
-            const target = document.querySelector(sel);
-            if (!target) return;
-            e.preventDefault();
-            const top = target.getBoundingClientRect().top + window.scrollY;
-            window.scrollTo({ top: Math.max(0, top - 6), behavior: 'smooth' });
-          }, { passive:false });
-        });
-      }
-    }
-    document.addEventListener('DOMContentLoaded', () => new DockNav());
-  </script>
+  <!-- Архів -->
+  <section id="archive" class="content-block">
+    <h2>Архів</h2>
+    <p>У цьому розділі можна переглянути ваші МРТ, КТ, УЗД, результати аналізів та інші дані.</p>
+    <button id="open-archive">Відкрити архів</button>
+  </section>
+
+  <!-- Контакти -->
+  <section id="contacts" class="content-block">
+    <h2>Контакти</h2>
+    <p>Якщо у вас є питання або пропозиції — напишіть нам:</p>
+    <ul>
+      <li>Email: support@epikriz.info</li>
+      <li>Telegram: @epikriz_support</li>
+    </ul>
+  </section>
+
+  <!-- Футер -->
+  <footer>
+    <p>&copy; 2025 Epikriz. Всі права захищені.</p>
+  </footer>
+
+  <script src="script.js"></script>
 </body>
 </html>
