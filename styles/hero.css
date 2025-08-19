@@ -1,6 +1,6 @@
 :root{
-  --bg: #0f172a;      /* фоновий колір сторінки */
-  --bg-soft: #0b1220; /* фон секцій під геро */
+  --bg: #0f172a;
+  --bg-soft: #0b1220;
   --text: #e8eef5;
   --muted:#b6c0cc;
   --ring: rgba(255,255,255,.18);
@@ -8,31 +8,43 @@
   --radius: 16px;
 }
 
-*{ box-sizing: border-box }
-html, body { height: 100%; margin: 0 }
+/* ВАЖНО: режем горизонтальный скролл у html и body */
+html, body { height:100%; margin:0; overflow-x:hidden; }
 body{
   background: var(--bg);
   color: var(--text);
   font: 16px/1.5 system-ui, -apple-system, Segoe UI, Roboto, Ubuntu, "Helvetica Neue", Arial;
-  overflow-x: hidden;  /* щоб не було горизонтального скролу на мобі */
 }
 
 /* ---------- HERO (edge-to-edge) ---------- */
 .hero{
   position: relative;
-  min-height: 100svh;           /* враховує мобільні бари (iOS/Android) */
+  min-height: 100svh;
   isolation: isolate;
-  overflow: clip;               /* “не виплескуватися” за межі */
+  /* не даём ничего вылезать за рамки, чтобы не появлялась правая «полоса» */
+  overflow: clip;
 }
 
-.hero__media{ position:absolute; inset:0 }
-.hero__media picture, .hero__media img{
-  position:absolute; inset:0; width:100%; height:100%;
-  object-fit: cover;            /* заповнити екран без спотворення */
-  object-position: center top;  /* показує “небо” та заголовок постера */
+/* медиа-слой растягиваем чётко по вьюпорту */
+.hero__media{ position:absolute; inset:0; }
+.hero__media picture,
+.hero__media img{
+  position:absolute; inset:0;
+  width: 100vw;       /* фикс: ширина строго по вьюпорту */
+  height: 100svh;     /* высота по реальной высоте экрана */
+  max-width: 100vw;   /* не больше вьюпорта */
+  max-height: 100svh;
+  object-fit: cover;
+  object-position: center top; /* по умолчанию показываем «небо» */
+  display:block;               /* убираем возможные inline-артефакты */
 }
 
-/* м’яке затемнення для читабельності */
+/* на широких десктопах чуть опускаем кадр, чтобы попасть в “табличку” */
+@media (min-width: 1200px){
+  .hero__media img{ object-position: center 12%; }
+}
+
+/* м’яке затемнення */
 .hero__overlay{
   position:absolute; inset:0; pointer-events:none;
   background: linear-gradient(
@@ -64,10 +76,8 @@ body{
   font-size: clamp(14px, 2.6vw, 18px);
 }
 
-/* док з кнопками */
-.hero__dock{
-  display:flex; gap:14px; justify-content:center;
-}
+/* док-кнопки */
+.hero__dock{ display:flex; gap:14px; justify-content:center; }
 .dock__btn{
   display:flex; flex-direction:column; align-items:center; gap:8px;
   text-decoration:none; color:#fff; outline:none;
@@ -105,7 +115,7 @@ body{
 .scroll-cue:hover{ background: rgba(11,18,32,.92) }
 .scroll-cue:focus-visible{ outline: 3px solid rgba(147,197,253,.35) }
 
-/* 1px «заплатка» — прибирає світлий шов під геро на деяких екранах */
+/* 1px seam-fix — прибираємо можливий «шов» під геро */
 .hero__seam{ position:absolute; left:0; right:0; bottom:-1px; height:1px; background: var(--bg-soft) }
 
 /* ---------- СЕКЦІЇ ---------- */
