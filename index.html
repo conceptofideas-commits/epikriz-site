@@ -3,52 +3,119 @@
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width,initial-scale=1" />
-  <title>Epikriz — інтерактивне hero</title>
-  <meta name="description" content="Повноекранне зображення з інтерактивною навігацією." />
-  <meta name="theme-color" content="#0f172a" />
-  <link rel="preload" as="image" href="/assets/hero-1280.webp" imagesrcset="/assets/hero-768.webp 768w, /assets/hero-1280.webp 1280w, /assets/hero-1920.webp 1920w" imagesizes="100vw">
-  <link rel="stylesheet" href="styles/hero.css">
+  <title>Medical Portfolio</title>
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    body, html {
+      height: 100%;
+      font-family: Arial, sans-serif;
+    }
+
+    .hero {
+      position: relative;
+      width: 100%;
+      height: 100vh; /* на весь екран */
+      overflow: hidden;
+    }
+
+    .hero picture,
+    .hero img {
+      position: absolute;
+      width: 100%;
+      height: 100%;
+      object-fit: cover; /* розтягує картинку */
+    }
+
+    /* Затемнення поверх */
+    .hero::after {
+      content: "";
+      position: absolute;
+      inset: 0;
+      background: linear-gradient(
+        rgba(0, 0, 0, 0.6) 0%,   
+        rgba(0, 0, 0, 0.3) 40%, 
+        rgba(0, 0, 0, 0.7) 100%
+      );
+      z-index: 0;
+    }
+
+    .hero-content {
+      position: relative;
+      z-index: 1;
+      color: #fff;
+      text-align: center;
+      top: 50%;
+      transform: translateY(-50%);
+      padding: 20px;
+    }
+
+    .hero-content h1 {
+      font-size: 3rem;
+      margin-bottom: 15px;
+    }
+
+    .hero-content p {
+      font-size: 1.5rem;
+      opacity: 0.9;
+    }
+
+    /* Панель кнопок */
+    .hero-buttons {
+      position: absolute;
+      bottom: 20px;
+      left: 50%;
+      transform: translateX(-50%);
+      display: flex;
+      gap: 20px;
+      z-index: 2;
+    }
+
+    .hero-buttons button {
+      padding: 12px 24px;
+      border: none;
+      border-radius: 6px;
+      background: rgba(255, 255, 255, 0.85);
+      color: #333;
+      font-size: 1rem;
+      cursor: pointer;
+      transition: all 0.3s ease;
+    }
+
+    .hero-buttons button:hover {
+      background: #00aaff;
+      color: #fff;
+    }
+  </style>
 </head>
 <body>
-
-  <!-- HERO (повноекранне зображення + кнопки) -->
-  <header class="hero" id="home" aria-label="Обкладинка сторінки">
-    <picture class="hero__media" aria-hidden="true">
-      <source type="image/webp"
-              srcset="/assets/hero-768.webp 768w, /assets/hero-1280.webp 1280w, /assets/hero-1920.webp 1920w"
-              sizes="100vw">
-      <img src="/assets/hero-1920.webp" alt="" />
+  <section class="hero">
+    <picture>
+      <!-- Основне: webp -->
+      <source srcset="assets/hero-poster.webp" type="image/webp">
+      <!-- Запасний варіант: png -->
+      <source srcset="assets/hero-poster.png" type="image/png">
+      <!-- Fallback -->
+      <img src="assets/hero-poster.png" alt="Medical Portfolio background">
     </picture>
 
-    <!-- нижня панель з кнопками -->
-    <nav class="hero__nav" aria-label="Головна навігація">
-      <!-- HTML-посилання/якорі (fallback без JS) -->
-      <a class="hero__btn" id="btn-healthcare" href="#healthcare" data-target="#healthcare" role="button">
-        <span class="hero__btn-label">Healthcare</span>
-      </a>
-      <a class="hero__btn" id="btn-exam" href="#exam" data-target="#exam" role="button">
-        <span class="hero__btn-label">Health exam</span>
-      </a>
-    </nav>
-  </header>
+    <div class="hero-content">
+      <h1>Medical Portfolio</h1>
+      <p>Ваші медичні записи та дослідження в одному місці</p>
+    </div>
 
-  <!-- Цільові секції (якорі) -->
-  <main id="content">
-    <section id="healthcare" class="section">
-      <div class="section__wrap">
-        <h2>Healthcare</h2>
-        <p>Опис блоку про медичну систему, маршрути пацієнта, профілактику, тощо.</p>
-      </div>
-    </section>
+    <!-- Кнопки -->
+    <div class="hero-buttons">
+      <button id="btn-healthcare">Healthcare</button>
+      <button id="btn-exam">Health exam</button>
+    </div>
+  </section>
 
-    <section id="exam" class="section">
-      <div class="section__wrap">
-        <h2>Health exam</h2>
-        <p>Опис блоку про обстеження: МРТ/КТ/УЗД, аналізи, підготовка, результати.</p>
-      </div>
-    </section>
-  </main>
-
-  <script type="module" src="scripts/hero.js"></script>
+  <!-- JS-підключення -->
+  <script src="script.js"></script>
 </body>
 </html>
