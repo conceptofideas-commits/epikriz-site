@@ -1,75 +1,67 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="uk">
 <head>
   <meta charset="utf-8" />
-  <meta
-    name="viewport"
-    content="width=device-width, initial-scale=1, viewport-fit=cover"
-  />
-  <title>Epikriz — Медичний архів</title>
-  <meta name="description" content="Персональний медичний архів: дослідження, результати й документи." />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Medical Portfolio</title>
   <meta name="theme-color" content="#0f172a" />
-  <meta property="og:image" content="/assets/hero-poster.webp" />
-  <link rel="stylesheet" href="styles/site.css" />
+  <link rel="preload" as="image" href="/assets/hero-poster.webp">
+  <link rel="stylesheet" href="styles/site.css">
 </head>
 <body>
 
-  <!-- HERO (повноекранне зображення без швів) -->
+  <!-- HERO (edge-to-edge) -->
   <header class="hero" id="home" aria-label="Обкладинка">
     <div class="hero__media" aria-hidden="true">
       <picture>
-        <source srcset="/assets/hero-poster.webp" type="image/webp" />
+        <source srcset="/assets/hero-poster.webp" type="image/webp">
         <img src="/assets/hero-poster.png" alt="" />
       </picture>
     </div>
 
-    <!-- затемнение + контент -->
     <div class="hero__overlay"></div>
-    <div class="hero__content">
-      <h1 class="hero__title">Epikriz</h1>
-      <p class="hero__subtitle">Персональний медичний архів</p>
 
-      <nav class="hero__dock" aria-label="Швидка навігація">
-        <a class="dock__btn" href="#about" data-target="#about">
-          <span class="dock__icon" aria-hidden="true">＋</span>
-          <span class="dock__label">Про сайт</span>
+    <div class="hero__content">
+      <h1 class="hero__title">Medical Portfolio</h1>
+      <p class="hero__subtitle">Мої медичні записи та дослідження в одному місці</p>
+
+      <nav class="hero__dock" aria-label="Головна навігація">
+        <a class="dock__btn" href="#healthcare" data-target="#healthcare">
+          <span class="dock__icon">✚</span>
+          <span class="dock__label">Healthcare</span>
         </a>
-        <a class="dock__btn" href="#archive" data-target="#archive">
-          <span class="dock__icon" aria-hidden="true">⇲</span>
-          <span class="dock__label">Архів</span>
+        <a class="dock__btn" href="#exam" data-target="#exam">
+          <span class="dock__icon">ʘ</span>
+          <span class="dock__label">Health exam</span>
         </a>
       </nav>
 
-      <!-- підказка прокрутки -->
-      <button class="scroll-cue" data-target="#about" aria-label="Гортати вниз">▾</button>
+      <button class="scroll-cue" data-target="#healthcare" type="button">Переглянути далі</button>
     </div>
 
-    <!-- 1px «заплатка», щоб не було світлого шва нижче геро -->
+    <!-- 1px seam-fix -->
     <div class="hero__seam" aria-hidden="true"></div>
   </header>
 
-  <!-- ПРО САЙТ -->
-  <section id="about" class="content-block">
+  <!-- СЕКЦІЇ (можеш лишити порожніми або наповнювати) -->
+  <section id="healthcare" class="content-block">
     <div class="wrap">
-      <h2>Про сайт</h2>
-      <p>
-        Зберігай свої МРТ/КТ/УЗД, результати аналізів та документи в одному місці.
-        Швидкий пошук, структурований архів, зручний доступ.
-      </p>
+      <h2>Healthcare</h2>
+      <p>Опис блоку про медичну систему, маршрути пацієнта, профілактику тощо.</p>
+      <a class="btn" href="#home">До початку</a>
     </div>
   </section>
 
-  <!-- АРХІВ -->
-  <section id="archive" class="content-block">
+  <section id="exam" class="content-block">
     <div class="wrap">
-      <h2>Архів</h2>
-      <p>Перегляд історії досліджень та документів. PDF/зображення/посилання.</p>
-      <button id="open-archive" class="btn">Відкрити архів</button>
+      <h2>Health exam</h2>
+      <p>Обстеження: МРТ/КТ/УЗД, аналізи, підготовка, результати.</p>
+      <a class="btn" href="#home">До початку</a>
     </div>
   </section>
 
   <footer class="footer">
-    <div class="wrap">© 2025 Epikriz</div>
+    <div class="wrap">© Epikriz</div>
   </footer>
 
   <script type="module" src="scripts/site.js"></script>
